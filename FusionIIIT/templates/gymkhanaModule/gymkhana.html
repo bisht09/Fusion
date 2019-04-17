@@ -40,12 +40,12 @@
             // console.log("status");
             // console.log(status);
             // status = 1 ;
-            // form.reset();
+            form.reset();
             if(status == 0)
             {
                 var formData = new FormData(form);
                 console.log(formData);
-                form.reset();
+                // form.reset();
                 $.ajax({
                     url: a,
                     data: formData,

@@ -55,54 +55,115 @@ def studentsData(request):
 
 @login_required
 def new_club(request):
-	if request.method == 'POST' and request.FILES["file"]:
+	if request.method == 'POST':
+		print(request.POST)
 		club_name = request.POST.get("club_name")
 		category = request.POST.get("category")
 		co = request.POST.get("co")
 		coco = request.POST.get("coco")
 		faculty = request.POST.get("faculty")
-		club_file = request.FILES["file"]
+		# club_file = request.FILES.get("file")
 		d_d = request.POST.get("d_d")
 
 		res = "error"
+		message = ""
+		co = co.strip()
+		coco = coco.strip()
+		faculty = faculty.strip()
+		# print("co ", co)
+		# print("coco ", coco)
+		# print("faculty ", faculty)
 		#checking if the form data is authentic
-		students =ExtraInfo.objects.all().filter(user_type = "student")
+		#checking for coordinator field
+		students = ExtraInfo.objects.all().filter(user_type = "student")
+		CO = None
 		for i in students:
-			if co is i:
+			# print("id ", i.id)
+			# print("co ", co)
+			if co is i.id:
 				res = "success"
+				CO = i
 				break
-		
+		if (res == "error"):
+			message = message + "The entered roll number of the co_ordinator does not exist"
+			content = {
+				'status' : res,
+				'message' : message
+			}
+			content = json.dumps(content)
+			return HttpResponse(content)
+
+		#checking for co-coordinator field
+		COCO = None
+		res = "error"
+		for i in students:
+			if coco is i.id:
+				res = "success"
+				COCO = i
+				break
+		if(res == "error"):
+			message = message + "The entered roll number of the co_coordinator does not exist"
+			content = {
+				'status' : res,
+				'message' : message
+			}
+			content = json.dumps(content)
+			return HttpResponse(content)
+
+		#checking for faculty field
+		FACUL = None
+		faculties = ExtraInfo.objects.all().filter(user_type = "faculty")
+		res = "error"
+		for i in faculties:
+			checkName = i.user.first_name + " " + i.user.last_name
+			if faculty is checkName:
+				res = "success"
+				FACUL = i
+				break
+		if (res == "error"):
+			message = message + "The entered faculty incharge does not exist"
+			content = {
+				'status' : res,
+				'message' : message
+			}
+			content = json.dumps(content)
+			return HttpResponse(content)
+		#getting queryset class objects
+		# CO = co.split(' - ')
+		# user_name = get_object_or_404(User, username = CO[1])
+		# extra = get_object_or_404(ExtraInfo, id = CO[0], user = user_name)
+		co_student = get_object_or_404(Student, id = CO)
 
 		#getting queryset class objects
-		CO = co.split(' - ')
-		user_name = get_object_or_404(User, username = CO[1])
-		extra = get_object_or_404(ExtraInfo, id = CO[0], user = user_name)
-		co_student = get_object_or_404(Student, id = extra)
-
-		#getting queryset class objects
-		COCO = coco.split(' - ')
-		user_name = get_object_or_404(User, username = COCO[1])
-		extra = get_object_or_404(ExtraInfo, id = COCO[0], user = user_name)
-		coco_student = get_object_or_404(Student, id = extra)
+		# COCO = coco.split(' - ')
+		# user_name = get_object_or_404(User, username = COCO[1])
+		# extra = get_object_or_404(ExtraInfo, id = COCO[0], user = user_name)
+		coco_student = get_object_or_404(Student, id = COCO)
 
 		#    #    print "----------------------------------"
 		#    #    print COCO[1]
 		#    #    print COCO[0]
 		#    print "----------------------------"
 		#getting queryset class objects
-		faculty = faculty.split(" - ")
-		user_name = get_object_or_404(User, username = faculty[1])
-		faculty = get_object_or_404(ExtraInfo, id = faculty[0], user = user_name)
-		faculty_inc = get_object_or_404(Faculty, id = faculty)
+		# faculty = faculty.split(" - ")
+		# user_name = get_object_or_404(User, username = faculty[1])
+		# faculty = get_object_or_404(ExtraInfo, id = faculty[0], user = user_name)
+		faculty_inc = get_object_or_404(Faculty, id = FACUL)
 
-		club_file.name = club_name+"_club_file"
+		# club_file.name = club_name+"_club_file"
 
-		club_info = Club_info(club_name = club_name, category = category, co_ordinator = co_student, co_coordinator = coco_student, faculty_incharge = faculty_inc, club_file = club_file, description = d_d)
+		club_info = Club_info(club_name = club_name, category = category, co_ordinator = co_student, co_coordinator = coco_student, faculty_incharge = faculty_inc, description = d_d)
 		club_info.save()
 
-		messages.success(request,"Successfully sent the request !!!")
+		message = message + "The form has been successfully dispatched for further process"
+		content = {
+			'status' : res,
+			'message' : message
+		}
+		content = json.dumps(content)
+		return HttpResponse(content)
 
-	return redirect('/gymkhana/')
+	# return redirect('/gymkhana/')
 
 
 def retrun_content(roll, name, desig , club__ ):
