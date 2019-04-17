@@ -53,7 +53,7 @@ class Club_info(models.Model):
         Student, null=False, related_name='coco_of')
     faculty_incharge = models.ForeignKey(
         Faculty, null=False, related_name='faculty_incharge_of')
-    club_file = models.FileField(upload_to='gymkhana/club_poster', null=True)
+    club_poster = models.FileField(upload_to='gymkhana/club_poster', null=True)
     activity_calender = models.FileField(
         upload_to='gymkhana/activity_calender', null=True, default=" ")
     description = models.TextField(max_length=256, null=True)

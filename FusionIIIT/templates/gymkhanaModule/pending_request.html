@@ -6,7 +6,7 @@
 
     <div class="ui pointing secondary menu">
         <a class="active item" data-tab="sentrequests">
-            Sent Requests
+            Sent Session Requests -{{ club_details }}
         </a>
     </div>
 
@@ -24,21 +24,20 @@
                     </th>
 
                     <th class="four wide column">
-                        Student
+                        Venue
                     </th>
 
                     <th>
-                        Roll No.
+                        Date
                     </th>
 
                     <th>
-                        Club
+                        Time
                     </th>
 
                     <th>
-                        Category
+                        Details
                     </th>
-
                     <th>
                         Status
                     </th>
@@ -46,35 +45,36 @@
                 </thead>
 
                 <tbody>
-                {% for i in Club_member %}
-                    {% if request.user.username in i.member|stringformat:"s" and i.status == "open" %}
+
+                {% for i in Club_session %}
+                    
                     <tr >
                         <td class="collapsing">
                             <div class="ui fitted checkbox">
-                                <input type="checkbox" id="{{ i.member.id }}" value="{{ i.member.id }},{{ i.club }}" name="check" > <label></label>
+                                <input type="checkbox" id="{{ i }}" value="{{ i }}" name="checks" > <label></label>
                             </div>
                         </td>
-                        <td onclick="view('{{ i.member.id.id }}','{{ i.club.club_name }}')">
-                            {{ i.member.id.id }}
+                        <td name="venue">
+                            {{ i.venue }}
                         </td>
 
                         <td>
-                            {{ i.member.id.user.username }}
+                            {{ i.date }}
                         </td>
 
                         <td>
-                            {{ i.club.club_name}}
+                            {{ i.start_time }}-{{ i.end_time }}
                         </td>
 
                         <td>
-                            {{ i.club.category }}
+                            {{ i.details }}
                         </td>
 
                         <td>
                             {{ i.status }}
                         </td>
                     </tr>
-                    {% endif %}
+            
                 {% endfor %}
                 </tr>
 
