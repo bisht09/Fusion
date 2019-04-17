@@ -97,6 +97,51 @@
     </div>
 
 
+    
+    <script>
+
+            function getDifference(a, b)
+                {
+                    var i = 0;
+                    var j = 0;
+                    var result = "";
+
+                    while (j < b.length)
+                    {
+                        if (a[i] != b[j] || i == a.length)
+                            result += b[j];
+                        else
+                            i++;
+                        j++;
+                    }
+                    return result;
+                }
+        $('#venue_type').change(function(){
+            $("#venue_details").val('') ;
+            $("div.venueDetails").find("div.dropdown").find("div.text").html('');
+            var venueType = $('#venue_type option:selected').text() ;
+            $.ajax({
+                url: "/gymkhana/get_venue/",
+                type: "post",
+                data: {'venueType':venueType},
+                success: function(response){
+                    // console.log("Hii")
+                    response = JSON.parse(response);
+                    var i ;
+                    $('#set_choices').empty();
+                    for(i=0 ; i<response.length ; i++){
+                        console.log(response[i])
+                        $('#set_choices').append($('<option>', {
+                            value: response[i],
+                            text: response[i]
+                        }));
+                    }
+                }
+            });
+        });
+
+    </script>
+
 
 
 {% endblock %}

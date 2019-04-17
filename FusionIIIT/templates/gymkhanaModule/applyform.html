@@ -169,49 +169,55 @@
         $('#co_Search').keyup(function(){
             current_value = $('#co_Search').val();
             // console.log("keyup function");
-            $.ajax({
-                type: 'POST',
-                url: '/gymkhana/students_data/',
-                data: {
-                    'current_value': current_value,
-                },
-                success: function(response){
-                    response = JSON.parse(response);
-                    // console.log(response);
-                    $('#dropdown-menu1').html('');
-                    for(var i=0;i<response.length;i++){
-                        // console.log(response[i].pk);
-                        $('#dropdown-menu1').append('<option value="'+response[i].pk+'">'+response[i].pk+'</option>');
-                    }
-                },
-                error: function(rs, e){
-                    console.log('error');
-                },
-            });
+            
+            if(current_value.length>=5) {
+                console.log(current_value)
+                $.ajax({
+                    type: 'POST',
+                    url: '/gymkhana/students_data/',
+                    data: {
+                        'current_value': current_value,
+                    },
+                    success: function(response){
+                        response = JSON.parse(response);
+                        // console.log(response);
+                        $('#dropdown-menu1').html('');
+                        for(var i=0;i<response.length;i++){
+                            // console.log(response[i].pk);
+                            $('#dropdown-menu1').append('<option value="'+response[i].pk+'">'+response[i].pk+'</option>');
+                        }
+                    },
+                    error: function(rs, e){
+                        console.log('error');
+                    },
+                });
+            }
         });
 
         $('#co_co_Search').keyup(function(){
             current_value = $('#co_co_Search').val();
             // console.log("keyup function");
-            $.ajax({
-                type: 'POST',
-                url: '/gymkhana/students_data/',
-                data: {
-                    'current_value': current_value,
-                },
-                success: function(response){
-                    response = JSON.parse(response);
-                    // console.log(response);
-                    $('#dropdown-menu2').html('');
-                    for(var i=0;i<response.length;i++){
-                        // console.log(response[i].pk);
-                        $('#dropdown-menu2').append('<option value="'+response[i].pk+'">'+response[i].pk+'</option>');
-                    }
-                },
-                error: function(rs, e){
-                    console.log('error');
-                },
-            });
+            if(current_value.length>=5) {
+                $.ajax({
+                    type: 'POST',
+                    url: '/gymkhana/students_data/',
+                    data: {
+                        'current_value': current_value,
+                    },
+                    success: function(response){
+                        response = JSON.parse(response);
+                        // console.log(response);
+                        $('#dropdown-menu2').html('');
+                        for(var i=0;i<response.length;i++){
+                            // console.log(response[i].pk);
+                            $('#dropdown-menu2').append('<option value="'+response[i].pk+'">'+response[i].pk+'</option>');
+                        }
+                    },
+                    error: function(rs, e){
+                        console.log('error');
+                    },
+                });
+            }
         });
 
         $('#faculty_Search').keyup(function(){

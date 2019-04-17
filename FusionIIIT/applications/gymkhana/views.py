@@ -175,7 +175,10 @@ def retrun_content(roll, name, desig , club__ ):
 	club_budget = Club_budget.objects.all()
 	club_session = Session_info.objects.all()
 	club_event = Club_report.objects.all()
+	venue_type = []
+	print(club_name)
 	venue = []
+
 	for i in Constants.venue:
 		for j in i[1]:
 			venue.append(j[0])
@@ -551,23 +554,9 @@ def reject(request):
 
 @login_required
 def cancel(request):
-
-	lis = list(request.POST.getlist('check'))
-
-	for user in lis :
-		#pos = lis.index(user)
-		user = user.split(',')
-		info = user[0].split(' - ')
-
-		#getting queryset class objects
-		user_name = get_object_or_404(User, username = info[1])
-		extra1 = get_object_or_404(ExtraInfo, id = info[0], user = user_name)
-		student = get_object_or_404(Student, id = extra1)
-
-		club_member = get_object_or_404(Club_member, club = user[1], member = student)
-
-		club_member.delete()
-		messages.success(request,"Successfully deleted !!!")
+	values = request.POST.getlist('venue')
+	print("hello")
+	print(values);
 
 	return redirect ('/gymkhana/')
 
